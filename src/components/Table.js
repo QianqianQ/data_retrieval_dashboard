@@ -1,4 +1,3 @@
-// @Flow
 import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
@@ -61,7 +60,6 @@ const headCells = [
     numeric: false,
     minWidth: 100,
     align: 'center',
-    // format: value => value.toFixed(2),
   },
 ];
 
@@ -137,7 +135,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function DataTable(props) {
+type Props = {
+  data: any
+};
+
+
+export default function DataTable(props: Props) {
   const { data } = props;
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
@@ -184,10 +187,9 @@ export default function DataTable(props) {
                   return (
               <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                 {headCells.map(headcell => {
-                  const value = row[headcell.id];
                   return (
                     <TableCell key={headcell.id} align={headcell.align}>
-                      {headcell.format ? headcell.format(value) : value}
+                      {row[headcell.id]}
                     </TableCell>
                   );
                 })}

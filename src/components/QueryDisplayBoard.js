@@ -1,4 +1,3 @@
-// @Flow
 import React from 'react';
 import { withStyles } from "@material-ui/core/styles";
 import Grid from '@material-ui/core/Grid';
@@ -39,47 +38,73 @@ const styles = theme => ({
   }
 });
 
+type Props = { classes: any };
 
-class QueryDisplayBoard extends React.Component {
-  constructor(props) {
+type State = {
+    startDate: any,
+    endDate: any,
+    accessToken: string,
+    data: any,
+    by_date: any,
+    error: any,
+    isLoaded: boolean
+};
+
+
+class QueryDisplayBoard extends React.Component<Props, State>  {
+  constructor(props: any) {
     super(props);
     this.state = {
-        startDate: localStorage.getItem('startDate') || new Date('2017-05-01'),
-        endDate: localStorage.getItem('endDate') || new Date('2017-06-15'),
-        accessToken: localStorage.getItem('accessToken') || "",
-        data: [],
-        by_date: [],
-        isLoaded: false,
-        error: null
+      startDate: new Date('2017-05-01'),
+      endDate: new Date('2017-06-15'),
+      accessToken: localStorage.getItem('accessToken') || "",
+      data: {},
+      by_date: [],
+      error: null,
+      isLoaded: false
     };
     this.startDateChange = this.startDateChange.bind(this);
     this.endDateChange = this.endDateChange.bind(this);
     this.accessTokenChange = this.accessTokenChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-
+  /*::startDateChange: (date: Date) => void */
   startDateChange(date) {
     localStorage.setItem('startDate', date);
     this.setState({startDate: date});
   }
-
+  /*::endDateChange: (date: Date) => void */
   endDateChange(date) {
     localStorage.setItem('endDate', date);
     this.setState({endDate: date});
   }
-
+  /*::accessTokenChange: (token: string) => void */
   accessTokenChange(token) {
     localStorage.setItem('accessToken', token);
     this.setState({accessToken: token});
   }
-
+  /*::handleSubmit: () => void */
   handleSubmit(event) {
+    console.log(this.state);
+    if (this.state.startDate > this.state.endDate)
+    {
+      alert("The time range is wrong!");
+      this.setState({
+        startDate: new Date('2017-05-01'),
+        endDate: new Date('2017-06-15'),
+        data: {},
+        by_date: [],
+        isLoaded: true,
+        error: "wrong time range"
+      });
+      localStorage.removeItem('startDate');
+      localStorage.removeItem('endDate');
+    }
+    else{
     event.preventDefault();
     const url = "https://api.giosg.com/api/reporting/v1/rooms/84e0fefa-5675-11e7-a349-00163efdd8db/" +
       "chat-stats/daily/?start_date=" + format(this.state.startDate, "yyyy-MM-dd")
       +"&end_date=" + format(this.state.endDate, "yyyy-MM-dd");
-    console.log(url);
-    console.log('Token ' + this.state.accessToken);
     const fetchConfig = {
       method: 'GET',
       headers: {
@@ -91,14 +116,34 @@ class QueryDisplayBoard extends React.Component {
     fetch(url, fetchConfig)
       .then(res => res.json())
       .then((result) => {
-          this.setState({data: result});
-          this.setState({'by_date': result['by_date']});
-          console.log(this.state.by_date);
+          this.setState({data: result,
+            by_date: result['by_date'],
+            error: null, 
+            isLoaded: true});
         },
-        (error) => {
-          console.log(error);
-        });
+      (error) => {
+        alert(error.message);
+      this.setState({
+        startDate: new Date('2017-05-01'),
+        endDate: new Date('2017-06-15'),
+        data: {},
+        by_date: [],
+        isLoaded: true,
+        error: error
+      });
+        localStorage.removeItem('startDate');
+        localStorage.removeItem('endDate');
+    })}
   }
+
+  componentDidMount() {
+    const startDate = localStorage.getItem('startDate');
+    const endDate = localStorage.getItem('endDate');
+    if (startDate) {
+      this.setState({startDate: new Date(startDate)})}
+    if (endDate) {
+      this.setState({endDate: new Date(endDate)})}
+    }
 
   render() {
     const { classes } = this.props;
@@ -176,10 +221,11 @@ class QueryDisplayBoard extends React.Component {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             {elements.map((value, index) => {
+              const count = this.state.data[value];
               return (
                 <Grid item xs={12} md={4} lg={4} key={index}>
                   <Paper className={fixedHeightPaper}>
-                    <DisplayCard name={value} value={this.state.data[value]}/>
+                    <DisplayCard name={value} value={count}/>
                   </Paper>
                 </Grid>
               )
@@ -196,8 +242,8 @@ class QueryDisplayBoard extends React.Component {
   }
 }
 
-QueryDisplayBoard.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
+/*QueryDisplayBoard.propTypes = {
+  classes: PropTypes.object,
+};*/
 
 export default withStyles(styles, { withTheme: true })(QueryDisplayBoard);
