@@ -5,24 +5,32 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import BarChartIcon from '@material-ui/icons/BarChart';
 
-import { Switch, Redirect } from 'react-router-dom';
+import {
+  NavLink,
+  BrowserRouter as Router,
+} from 'react-router-dom'
 
-export const mainListItems = (
+export const NavBar = (
+  <Router>
   <div>
     <ListItem button>
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
+      <NavLink activeClassName="active" to="/">
       <ListItemText primary="Dashboard" />
+      </NavLink>
     </ListItem>
-
     <ListItem button>
       <ListItemIcon>
         <BarChartIcon />
       </ListItemIcon>
-      <ListItemText primary="Charts" />
+      {/* Not implemented */}
+      <NavLink activeClassName="active" to="/reports">
+      <ListItemText primary="Reports" />
+      </NavLink>
     </ListItem>
-
   </div>
+  </Router>
 );
 

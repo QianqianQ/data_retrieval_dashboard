@@ -8,13 +8,13 @@ import {
 } from '@material-ui/pickers';
 import {TextField, InputAdornment, Button} from '@material-ui/core';
 import {AccountBox} from '@material-ui/icons'
-import PropTypes from 'prop-types';
 import {format} from "date-fns";
 import clsx from 'clsx';
 import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
 import DisplayCard from './Card';
 import DataTable from './Table';
+import Chart from './Chart';
 
 const styles = theme => ({
   root: {
@@ -233,6 +233,11 @@ class QueryDisplayBoard extends React.Component<Props, State>  {
              <Grid item xs={12}>
               <Paper className={classes.paper}>
                 <DataTable data={this.state.by_date}/>
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper className={classes.paper} >
+                <Chart data={this.state.by_date} />
               </Paper>
             </Grid>
           </Grid>

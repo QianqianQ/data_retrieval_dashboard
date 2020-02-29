@@ -10,10 +10,10 @@ type Props = {
 export default function DisplayCard(props: Props) {
   return (
     <React.Fragment>
-      <Typography component="h1" variant="h5" color="primary" gutterBottom styles={{"flow":"auto"}}>
+      <Typography component="h1" variant="h5" color="primary" gutterBottom styles={{"align":"center"}}>
         {props.name}
       </Typography>
-      <Typography component="p" variant="h5" styles={{"flow":"auto"}}>
+      <Typography component="p" variant="h5" styles={{"align":"center"}}>
         {props.value}
       </Typography>
     </React.Fragment>

@@ -7,12 +7,11 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import { Typography } from '@material-ui/core';
-import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Container from '@material-ui/core/Container';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import { mainListItems } from './listItems';
+import { NavBar } from './NavBar';
 import QueryDisplayBoard from './QueryDisplayBoard';
 
 const drawerWidth = 240;
@@ -141,10 +140,7 @@ export default function Dashboard() {
             <ChevronLeftIcon />
           </IconButton>
         </div>
-        <Divider />
-        <List>{mainListItems}</List>
-        <Divider />
-        {/*<List>{secondaryListItems}</List>*/}
+        <List>{NavBar}</List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
